@@ -1,3 +1,2 @@
 abc
 result
-abcdefg
