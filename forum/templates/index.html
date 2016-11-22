@@ -12,24 +12,14 @@
 			</div>
 			<div>
 				<div class="col-xs-12 col-md-10">
+					{% for b in blocks %}
 					<div class="panel panel-default">
-					  <div class="panel-heading"><a href="#" style="font-size:18px;">运维专区</a><span class="pull-right" style="color:green;"> admin </span></div>
+					  <div class="panel-heading"><a href="/article/list/{{ b.id  }}" style="font-size:18px;">{{ b.names }}</a><span class="pull-right" style="color:green;">{{ b.manager_name }}</span></div>
 					  <div class="panel-body">
-					    资料内容
+					    {{ b.desc }}
 					  </div>
 					</div>
-					<div class="panel panel-default">
-					  <div class="panel-heading"><a href="#">问题交流</a><span class="pull-right" style="color:green;"> root </span></div>
-					  <div class="panel-body">
-					    资料内容
-					  </div>
-					</div>
-					<div class="panel panel-default">
-					  <div class="panel-heading"><a href="#">资料共享</a><span class="pull-right" style="color:green;"> root </span></div>
-					  <div class="panel-body">
-					    资料内容
-					  </div>
-					</div>
+					{% endfor %}
 				</div>
 				<div class="col-xs-12 col-md-2">
 					<div class="panel panel-default">
