@@ -33,6 +33,9 @@
   </div>
 </div>
 <div class="col-sm-4">
+{% if c %}
+   <div class="alert alert-danger">用户名已存在</div>
+{% endif %}
 {% for field in form %}
  {% if field.errors %}
    {% for error in field.errors %}
@@ -40,9 +43,6 @@
    {% endfor %}
  {% endif %}
 {% endfor %}
-{% if c %}
-   <div class="alert alert-danger">用户名已存在</div>
-{% endif %}
 {% if not b and b is not None %}
    <div class="alert alert-danger">请确认密码是否一致</div>
 {% endif %}

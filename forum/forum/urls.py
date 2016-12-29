@@ -16,10 +16,12 @@ Including another URLconf
 from django.conf.urls import url,include
 from django.contrib import admin
 from user.views import add_user
+from active_user.views import activeUser
 import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^article/',include('article.urls')),
     url(r'^register',add_user),
     url(r'^$',views.index),
+    url(r'^active/(?P<code>\w+$',activeUser),
 ]
