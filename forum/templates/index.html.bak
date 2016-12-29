@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+        <head>
+                <meta charset="utf-8">
+                <title>Hello world</title>
+		<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+        </head>
+        <body>
+		<div class="contin">
+			<div class="jumbotron">
+ 				 	<center><h2>论坛首页</h2></center>
+			</div>
+			<div>
+				<div class="col-xs-12 col-md-10">
+					{% for b in blocks %}
+					<div class="panel panel-default">
+					  <div class="panel-heading"><a href="/article/list/{{ b.id  }}" style="font-size:18px;">{{ b.names }}</a><span class="pull-right" style="color:green;">{{ b.manager_name }}</span></div>
+					  <div class="panel-body">
+					    {{ b.desc }}
+					  </div>
+					</div>
+					{% endfor %}
+				</div>
+				<div class="col-xs-12 col-md-2">
+					<div class="panel panel-default">
+					  <div class="panel-heading"><a href="#">个人中心</a></div>
+					</div>
+				</div>
+			</div>
+	      	</div>	
+        </body>
+
+
+</html>

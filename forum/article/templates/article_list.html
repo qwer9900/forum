@@ -1,1 +1,50 @@
-nice to see you !!!
+{% extends "base.html" %}
+{% block content %}
+<ol class="breadcrumb">
+  <li ><a href="/">首页</a></li>
+  <li class="active"><a href="#">{{ b.names }}</a></li>
+</ol>
+<a href="/article/create/{{ b.id }}" class="btn btn-primary" role="button">发表文章</a>
+<br />
+<br />
+<table class="table table-bordered">
+	<thead>
+	 <th class="active">标题</th>
+	 <th class="active">作者</th>
+	 <th class="active">创建时间</th>
+	 <th class="active">最后更新时间</th>
+	</thead>
+	<tbody>
+	{%for article in articles %}
+	<tr >
+		<td> <a href="/article/detail/{{ article.id}}">{{ article.title}}</a> </td> 
+		<td class="info">{{ article.content	}}</td>
+		<td>{{ article.create_timestamp|date:"Y-m-d P"}}</td>
+		<td>{{ article.last_timestamp|date:"Y-m-d P"}}</td>
+	</tr>
+	{% endfor %}
+	</tbody>
+</table>
+<nav>
+  <ul class="pagination">
+  {% if before > 0 %}
+    <li><a href="?page_no=1">首页</a></li>
+    <li><a href="?page_no={{ last }}" aria-label="Previous">&laquo;</a></li>
+  {% endif %}  
+  {% for i in page_links %}
+  {% if i == page_no %}
+    <li class="active"><a href="?page_no={{ page_no }}">{{ page_no }}</a></li>
+  {% else %}
+    <li class=""><a href="?page_no={{ i }}">{{ i }}</a></li>
+  {% endif %}
+  {% endfor %}
+  {% if after <= p.num_pages %}   
+    <li><a href="?page_no={{ next }}" aria-label="Previous">&raquo;</a></li>
+    <li><a href="?page_no={{ p.num_pages }}">尾页</a></li>
+  {% endif %}
+</ul>
+
+
+</nav>
+
+{% endblock %}
