@@ -4,6 +4,7 @@ from .models import User
 from .form import user_form
 from active_user.models import active_User
 import uuid
+from django.core.mail import send_mail
 def add_user(request):
     if request.method == "GET":
         return render(request,"add_user.html")
@@ -15,7 +16,7 @@ def add_user(request):
         b = (password==password1 and password is not None )
         strUuid = str(uuid.uuid4()).replace("-","")
         c = User.objects.filter(username=username).exists()
-        active_link = "http://%s/active/%s" %(requset.get_host(),strUuid)
+        active_link = "http://%s/active/%s" %(request.get_host(),strUuid)
         active_email = ''' 点击<a href="%s">这里</a>激活''' %active_link
         if not(c) and form.is_valid() and password == password1:         
             user = User.objects.create_user(form.cleaned_data["username"],form.cleaned_data["email"],form.cleaned_data["password"],)
@@ -23,6 +24,7 @@ def add_user(request):
             user.save()
             active_user=active_User(user=form.cleaned_data["username"],active_str=strUuid)
             active_user.save()
+            email = form.cleaned_data["email"]
             send_mail(subject='[pyrhonme]激活邮件',
                       message='点击链接激活:%s'%active_link,
                       html_message=active_email,

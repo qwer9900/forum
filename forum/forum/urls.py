@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^article/',include('article.urls')),
     url(r'^register',add_user),
     url(r'^$',views.index),
-    url(r'^active/(?P<code>\w+$',activeUser),
+    url(r'^active/(?P<code>\w+)$',activeUser),
+    url(r'^accounts/',include('django.contrib.auth.urls')),
 ]
