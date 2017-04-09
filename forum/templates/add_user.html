@@ -46,6 +46,9 @@
 {% if not b and b is not None %}
    <div class="alert alert-danger">请确认密码是否一致</div>
 {% endif %}
+{%if e %}
+   <div class="alert alert-danger">邮箱已经存在请重新输入</div>
+{% endif %}
 </div>
 </form>
 {% endblock %}

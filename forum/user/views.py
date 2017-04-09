@@ -13,12 +13,15 @@ def add_user(request):
         password = request.POST["password"].strip()
         password1 = request.POST["password1"].strip()
         username = request.POST["username"]
+        email = request.POST["email"].strip()
+   
         b = (password==password1 and password is not None )
         strUuid = str(uuid.uuid4()).replace("-","")
         c = User.objects.filter(username=username).exists()
+        e = User.objects.filter(email=email).exists()
         active_link = "http://%s/active/%s" %(request.get_host(),strUuid)
         active_email = ''' 点击<a href="%s">这里</a>激活''' %active_link
-        if not(c) and form.is_valid() and password == password1:         
+        if not(e) and not(c) and form.is_valid() and password == password1:         
             user = User.objects.create_user(form.cleaned_data["username"],form.cleaned_data["email"],form.cleaned_data["password"],)
             user.is_active="False"
             user.is_staff="True"
@@ -34,5 +37,5 @@ def add_user(request):
                       fail_silently=False)
             return HttpResponse("seccess")
         else:
-            return render(request,"add_user.html",{"form":form,"b":b,"c":c})
+            return render(request,"add_user.html",{"form":form,"b":b,"c":c,"e":e,})
 
