@@ -21,6 +21,7 @@ def add_user(request):
         if not(c) and form.is_valid() and password == password1:         
             user = User.objects.create_user(form.cleaned_data["username"],form.cleaned_data["email"],form.cleaned_data["password"],)
             user.is_active="False"
+            user.is_staff="True"
             user.save()
             active_user=active_User(user=form.cleaned_data["username"],active_str=strUuid)
             active_user.save()
