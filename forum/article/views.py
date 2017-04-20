@@ -35,7 +35,8 @@ def createAppear(request,block_id):
 def detail(request,d_id):
     d_id = int(d_id)
     article = Article.objects.get(id=d_id)
-    page_no = int(request.GET.get("page_no","1"))
-    all_comments = Comment.objects.filter(article=d_id,status=0).order_by("-id")
-    comments_objs,page = paginate_queryset(all_comments,page_no,1)
+    page_no = int(request.GET.get("page_no","2"))
+    all_comments = Comment.objects.filter(article=article,status=0).order_by("-id")
+    comments_objs,page = paginate_queryset(all_comments,page_no,2)
+    print(page)
     return render(request,"detail.html",{"detail":article,"page":page,"comments":comments_objs})
