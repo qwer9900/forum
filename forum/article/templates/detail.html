@@ -4,33 +4,26 @@
   <li ><a href="/">首页</a></li>
   <li class="active"><a href="/article/list/{{ detail.block.id }}">{{ detail.block.names }}</a></li>
 </ol>
-<div class="col-sm-4 control-label">
- <p>
-   作者  ：{{ detail.owner }}          </br>
- 文章状态：{{ detail.get_status_display }}   </br>
- 创建时间：{{ detail.create_timestamp }}   </br>
- 当前时间：{{ detail.last_timestamp }}   </br>
- </p>
-</div>
-<div class="col-sm-8 control-label">
-<div>
-<center> <p> {{ detail.title }}  </p></center>
-</div>
-<div>
-<p> {{ detail.content }} </p>
-</div>
-</div>
 <div class="col-sm-12">
 <table class="table table-bordered">
         <thead>
-         <th class="active" style=width:20%;font-size:16px>作者</th>
-         <th class="active" style=with:60%;font-size:16px>内容</th>
+         <th class="active" style=width:20%;font-size:16px>作者  ：{{ detail.owner }}</br> 创建时间：{{ detail.create_timestamp }}   </br></th>
+         <th class="active" style=with:60%;font-size:16px><center>{{ detail.title }} </center></br> {{ detail.content }} </th>
+        
         </thead>
         <tbody>
         {%for comment in comments %}
         <tr >
                 <td>{{ comment.owner }}</td>
-                <td>{{ comment.content | linebreaksbr }}</td>
+                <td>
+	{% if comment.to_comment %}
+		<blockquote>
+			<b>{{ comment.to_comment.owner.username }} :</b>
+			<br />
+			{{ comment.to_comment.content | linebreaksbr }}
+		</blockquote>
+	{% endif %}
+{{ comment.content | linebreaksbr }} <a href="#replyRegion" data-id="{{ comment.id }}"  class="replyBtn btn btn-primary pull-right">回复</a>  </td>
         </tr>
         {% endfor %}
         </tbody>
@@ -39,8 +32,8 @@
 </div>
 <div class="col-sm-10">
 <div class="form-group">
-<label for="inputEmail3" class="col-sm-2 control-label">作者</label>
-<div class="col-sm-10">
+<label for="inputEmail3" class="col-sm-2 control-label">作者:{{ request.user }}</label>
+<div id="replyRegion" class="col-sm-10">
 <textarea id="commentContent" class="form-control" rows="3"></textarea>
 </div>
 </div>
@@ -50,20 +43,30 @@
     </div>
   </div>
 </div>
-<script type="text/javascript" src="/static/jquery/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="/static/jquery/jquery.csrf.js"></script>
+<script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.csrf.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	var article_id = {{ detail.id }};
         var page_cnt = {{ page.page_cnt }};
+        var current_no = {{ page.page_cnt }};
+        var to_comment_id = 0;
+        if ( {{ page.count }} % 5 == 0 ){
+		current_no = {{ page.page_cnt }} + 1 ;
+	}
+	$(".replyBtn").click(function(e){
+		to_comment_id = parseInt($(e.target).attr("data-id"));
+		$("#commentContent").focus();
+		return false ;
+	});
 	$("#commentBtn").click(function(){
 		var comment = $("#commentContent").val();
-		var param = {"article_id":article_id,"comment":comment};
+		var param = {"article_id":article_id,"comment":comment,"to_comment_id":to_comment_id,"current_no":current_no};
 		$.post("/comment/create/",param,function(data){
 			var ret = JSON.parse(data);
 			if (ret["status"] =="ok"){
 				$("#commentContent").val("");
-				window.location.href = "/article/detail/{{ detail.id }}?page_no=1"
+				window.location.href = "/article/detail/{{ detail.id }}?page_no="+current_no
 
 			} else {
 			alert(ret["msg"]);

@@ -16,9 +16,15 @@
 	<div class="panel panel-default">
 		<div class="panel-heading"><a href="#">个人中心</a></div>
       		{% if user.is_authenticated %}
+                        {% if user.userprofile.avatar %}
+				<img src={{ user.userprofile.avatar }} style="width:100%;height:150px;" alt="头像" />
+			{% else %}
+				<a href="/usercenter/uploadavatar/">没有头像？去上传</a>
+			{% endif %}
 			<p>{{ user.username }}.欢迎来到论坛。</p>
 			<a href="/accounts/logout">登出</a>
                         <a href="/accounts/password_reset">重置密码</a>
+ 		     <a href="/message/list"><span class="badge">{{ msg_cnt }}</span></a>
 		{% else %}	
 			<p>匿名用户.请<a href="/accounts/login">登录</a>.</p>
 		{% endif %}

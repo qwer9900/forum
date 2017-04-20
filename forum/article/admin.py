@@ -1,8 +1,10 @@
 from django.contrib import admin
-
+from comment.models import Comment
 from .models import Article 
 
+class CommentInline(admin.TabularInline):
+    model = Comment
+    can_delete = False
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ("block","title","content","status","create_timestamp","last_timestamp")
-
+    inlines = [CommentInline]
 admin.site.register(Article,ArticleAdmin)
