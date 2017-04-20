@@ -4,22 +4,17 @@ from .models import Article
 from .forms import ArticleForm
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-
+from tools import paginate_queryset
+from comment.views import comment
+from comment.models import Comment
 def article_list(request,block_id):
     block_id = int(block_id)
     block = Block.objects.get(id=block_id)
     ARTICLE_CNT_1PAGE = 1
     page_no = int(request.GET.get("page_no","1"))
     all_articles = Article.objects.filter(block=block,status=0).order_by("-id")
-    p = Paginator(all_articles,ARTICLE_CNT_1PAGE)
-    page = p.page(page_no)
-    articles_objs = page.object_list
-    page_links = [i for i in range(page_no-5,page_no+6) if i >0 and i <= p.num_pages]
-    before = page_links[0]-1
-    after = page_links[-1]+1
-    next = page_no+1
-    last = page_no-1 
-    return render(request,"article_list.html",{"articles":articles_objs,"b":block,"p":p,"page_no":page_no,"page_links":page_links,"before":before,"after":after,"next":next,"last":last})
+    articles_objs,page = paginate_queryset(all_articles,page_no,1)
+    return render(request,"article_list.html",{"articles":articles_objs,"b":block,"page":page})
 @login_required
 def createAppear(request,block_id):
     block_id = int(block_id)
@@ -40,4 +35,7 @@ def createAppear(request,block_id):
 def detail(request,d_id):
     d_id = int(d_id)
     article = Article.objects.get(id=d_id)
-    return render(request,"detail.html",{"detail":article,})
+    page_no = int(request.GET.get("page_no","1"))
+    all_comments = Comment.objects.filter(article=d_id,status=0).order_by("-id")
+    comments_objs,page = paginate_queryset(all_comments,page_no,1)
+    return render(request,"detail.html",{"detail":article,"page":page,"comments":comments_objs})

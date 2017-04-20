@@ -18,6 +18,7 @@ from django.contrib import admin
 from user.views import add_user
 from active_user.views import activeUser
 import views
+from comment.views import comment
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^article/',include('article.urls')),
@@ -25,4 +26,5 @@ urlpatterns = [
     url(r'^$',views.index),
     url(r'^active/(?P<code>\w+)$',activeUser),
     url(r'^accounts/',include('django.contrib.auth.urls')),
+    url(r'^comment/create/',comment),
 ]

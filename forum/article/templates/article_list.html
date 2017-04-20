@@ -27,26 +27,5 @@
 	{% endfor %}
 	</tbody>
 </table>
-<nav>
-  <ul class="pagination">
-  {% if before > 0 %}
-    <li><a href="?page_no=1">首页</a></li>
-    <li><a href="?page_no={{ last }}" aria-label="Previous">&laquo;</a></li>
-  {% endif %}  
-  {% for i in page_links %}
-  {% if i == page_no %}
-    <li class="active"><a href="?page_no={{ page_no }}">{{ page_no }}</a></li>
-  {% else %}
-    <li class=""><a href="?page_no={{ i }}">{{ i }}</a></li>
-  {% endif %}
-  {% endfor %}
-  {% if after <= p.num_pages %}   
-    <li><a href="?page_no={{ next }}" aria-label="Previous">&raquo;</a></li>
-    <li><a href="?page_no={{ p.num_pages }}">尾页</a></li>
-  {% endif %}
-</ul>
-
-
-</nav>
-
+{% include "Pagination.html" %}
 {% endblock %}
